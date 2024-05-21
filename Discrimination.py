@@ -200,6 +200,9 @@ class Discrimination(OpenRTM_aist.DataFlowComponentBase):
     #
     def onExecute(self, ec_id):
         
+        char_data = None
+        person_data = None
+        
         if self._char_coordIn.isNew():
             char_data = self._char_coordIn.read()
             print(f"Received char_coords:{char_data.data}")
@@ -209,15 +212,17 @@ class Discrimination(OpenRTM_aist.DataFlowComponentBase):
             print(f"Received person_coords:{person_data.data}")
             
         if char_data and person_data:
-            for char_id,(char_center_x,char_center_y) in enumerate(char_data.data):
+            for char_id,(char_center_x,char_center_y) in enumerate(zip(char_data.data[0::2], char_data.data[1::2])):
 
-                for person_x, person_y in person_data.data:
+                for person_x, person_y in zip(person_data.data[0::2], person_data.data[1::2]):
                     if (abs(char_center_x - person_x) <= self._h[0] / 2) and (abs(char_center_y - person_y) <= self._h[0] / 2):
-                        char_id=RTC.TimedShort(RTC.Time(0,0),char_id)
-                        print(f"Matching id: {char_id.data}")
-                        self._idOut.write(char_id)
+                        self._d_id.data = char_id
+                        print("true")
+                        print(f"Matching id: {self._d_id.data}")
+                        self._idOut.write(self._d_id)
                         break
-
+                    else:
+                        print("false")
         return RTC.RTC_OK
 	
     ###
