@@ -200,29 +200,42 @@ class Discrimination(OpenRTM_aist.DataFlowComponentBase):
     #
     def onExecute(self, ec_id):
         
-        char_data = None
-        person_data = None
+        char_data = []
+        person_data = []
         
+        # キャラクター座標の読み込み
         if self._char_coordIn.isNew():
-            char_data = self._char_coordIn.read()
-            print(f"Received char_coords:{char_data.data}")
+            while self._char_coordIn.isNew():
+                xy_data = self._char_coordIn.read().data
+                for i in range(0, len(xy_data), 2):
+                 char_data.append((xy_data[i], xy_data[i + 1])) 
+        print(f"Received char_coords: {char_data}")
 
+        # 人物座標の読み込み
         if self._person_coordIn.isNew():
-            person_data = self._person_coordIn.read()
-            print(f"Received person_coords:{person_data.data}")
+            while self._person_coordIn.isNew():
+                 xy_data = self._person_coordIn.read().data
+                 for i in range(0, len(xy_data), 2):
+                  person_data.append((xy_data[i], xy_data[i + 1]))
+        print(f"Received person_coords: {person_data}")
+        print("----------------------------------------")
             
         if char_data and person_data:
-            for char_id,(char_center_x,char_center_y) in enumerate(zip(char_data.data[0::2], char_data.data[1::2])):
-
-                for person_x, person_y in zip(person_data.data[0::2], person_data.data[1::2]):
-                    if (abs(char_center_x - person_x) <= self._h[0] / 2) and (abs(char_center_y - person_y) <= self._h[0] / 2):
+            for char_id, (x, y) in enumerate(char_data):    
+                print(char_id)
+                
+                for person_id, (a, b) in enumerate(person_data):
+                   
+                    if (abs(x - a) <= self._h[0] / 2) and (abs(y - b) <= self._h[0] / 2):
                         self._d_id.data = char_id
                         print("true")
                         print(f"Matching id: {self._d_id.data}")
                         self._idOut.write(self._d_id)
+                        
                         break
                     else:
                         print("false")
+            print("----------------------------------------")
         return RTC.RTC_OK
 	
     ###
