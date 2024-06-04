@@ -206,39 +206,42 @@ class Discrimination(OpenRTM_aist.DataFlowComponentBase):
         # キャラクター座標の読み込み
         if self._char_coordIn.isNew():
             while self._char_coordIn.isNew():
+                time.sleep(0.005)
                 xy_data = self._char_coordIn.read().data
                 for i in range(0, len(xy_data), 2):
                  char_data.append((xy_data[i], xy_data[i + 1])) 
-        print(f"Received char_coords: {char_data}")
-
-        # 人物座標の読み込み
-        if self._person_coordIn.isNew():
-            while self._person_coordIn.isNew():
-                 xy_data = self._person_coordIn.read().data
-                 for i in range(0, len(xy_data), 2):
-                  person_data.append((xy_data[i], xy_data[i + 1]))
-        print(f"Received person_coords: {person_data}")
-        print("----------------------------------------")
+            print(f"Received char_coords: {char_data}")
             
-        if char_data and person_data:
-            for char_id, (x, y) in enumerate(char_data):    
-                print(char_id)
+
+            # 人物座標の読み込み
+            if self._person_coordIn.isNew():
+                while self._person_coordIn.isNew():
+                     time.sleep(0.005)
+                     xy_data = self._person_coordIn.read().data
+                     for i in range(0, len(xy_data), 2):
+                      person_data.append((xy_data[i], xy_data[i + 1]))
+                print(f"Received person_coords: {person_data}")
+                print("----------------------------------------")
+            
+            if char_data and person_data:
+                for char_id, (x, y) in enumerate(char_data):    
+                    print(char_id)
                 
-                for person_id, (a, b) in enumerate(person_data):
+                    for person_id, (a, b) in enumerate(person_data):
                    
-                    if (abs(x - a) <= self._h[0] / 2) and (abs(y - b) <= self._h[0] / 2):
-                        self._d_id.data = char_id
-                        print("true")
-                        print(f"Matching id: {self._d_id.data}")
-                        self._idOut.write(self._d_id)
+                        if (abs(x - a) <= self._h[0] / 2) and (abs(y - b) <= self._h[0] / 2):
+                            self._d_id.data = char_id
+                            print("true")
+                            print(f"Matching id: {self._d_id.data}")
+                            self._idOut.write(self._d_id)
                         
-                        break
-                    else:
-                        print("false")
-            print("----------------------------------------")
+                            break
+                        else:
+                            print("false")
+                print("----------------------------------------")
         return RTC.RTC_OK
 	
-    ###
+        ###
     ## The aborting action when main logic error occurred.
     ##
     ## @param ec_id target ExecutionContext Id
@@ -336,4 +339,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
