@@ -203,7 +203,7 @@ class Discrimination(OpenRTM_aist.DataFlowComponentBase):
         char_data = []
         person_data = []
         
-        # ƒLƒƒƒ‰ƒNƒ^[À•W‚Ì“Ç‚İ‚İ
+        # ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½ï¿½ï¿½Wï¿½Ì“Ç‚İï¿½ï¿½ï¿½
         if self._char_coordIn.isNew():
             while self._char_coordIn.isNew():
                 time.sleep(0.005)
@@ -213,7 +213,7 @@ class Discrimination(OpenRTM_aist.DataFlowComponentBase):
             print(f"Received char_coords: {char_data}")
             
 
-            # l•¨À•W‚Ì“Ç‚İ‚İ
+            # ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½Ì“Ç‚İï¿½ï¿½ï¿½
             if self._person_coordIn.isNew():
                 while self._person_coordIn.isNew():
                      time.sleep(0.005)
@@ -234,8 +234,10 @@ class Discrimination(OpenRTM_aist.DataFlowComponentBase):
                             print("true")
                             print(f"Matching id: {self._d_id.data}")
                             self._idOut.write(self._d_id)
+                            time.sleep(1.0)
+                            return RTC.RTC_OK
                         
-                            break
+                            
                         else:
                             print("false")
                 print("----------------------------------------")
