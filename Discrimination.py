@@ -1,4 +1,4 @@
-ï»¿#!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # -*- Python -*-
 
@@ -203,7 +203,7 @@ class Discrimination(OpenRTM_aist.DataFlowComponentBase):
         char_data = []
         person_data = []
         
-        # ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼åº§æ¨™ã®èª­ã¿è¾¼ã¿
+        # ƒLƒƒƒ‰ƒNƒ^[À•W‚Ì“Ç‚İ‚İ
         if self._char_coordIn.isNew():
             while self._char_coordIn.isNew():
                 time.sleep(0.005)
@@ -213,7 +213,7 @@ class Discrimination(OpenRTM_aist.DataFlowComponentBase):
             print(f"Received char_coords: {char_data}")
             
 
-            # äººç‰©åº§æ¨™ã®èª­ã¿è¾¼ã¿
+            # l•¨À•W‚Ì“Ç‚İ‚İ
             if self._person_coordIn.isNew():
                 while self._person_coordIn.isNew():
                      time.sleep(0.005)
